@@ -36,11 +36,14 @@ handleSubmit = (event,qid) => {
 
 
 	render() {
-		const {questions} = this.props
+		const {questions, users} = this.props
 		const {answerSubmitted} = this.state
 		const longPath = this.props.location.pathname
 		const splitPath = longPath.split('/')
 		const qid = splitPath[2]
+		const author = users[questions[qid].author].name
+		const authorAvatar = users[questions[qid].author].avatarURL
+		const timestamp = questions[qid].timestamp
 		//Handle erros for questions that are not there
 		if (questions[qid]===undefined){
 		    return <Errorpage/>
@@ -51,7 +54,12 @@ handleSubmit = (event,qid) => {
 		return(
 		<Container className="componentLength">
 				<Row>
-					<Col sm={12}>
+					<Col sm={4}>
+			            <img alt={author} src={authorAvatar} className="avatar"/>
+			            <div>Asked by: <span>{author}</span></div>
+			            <div> <span> Created: {timestamp} </span> </div>
+			        </Col>
+					<Col sm={8}>
 						Would You Rather ... ?
 						<fieldset id="answer">
 							<div>
@@ -73,12 +81,13 @@ handleSubmit = (event,qid) => {
 
 }}
 
-const mapStateToProps = ({questions,authedUser}, qid) => {
+const mapStateToProps = ({questions,users, authedUser}, qid) => {
     return {
     	answers: authedUser.id.answers,
     	questions,
     	qid,
-       	authedUser
+       	authedUser,
+       	users
     }
 }
 
